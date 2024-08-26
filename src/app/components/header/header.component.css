@@ -1,0 +1,14 @@
+header{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    background-color: rgb(255, 255, 150);
+    box-shadow: 1px 1px 6px black;
+    border-radius: 0px 0px 5px 5px;
+    margin-bottom: 32px;
+}img{
+    width: 125px;
+
+}

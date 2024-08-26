@@ -1,0 +1,30 @@
+.contenedor{
+    display: grid;
+    width: 300px;
+    background-color: rgb(211, 247, 247);
+    justify-items: center;
+    align-items: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border: 1px solid black;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgb(42, 42, 42);
+}
+.img{
+    width: 100%;
+    display: grid;
+    justify-items: center;
+    margin-bottom: 8px;
+    
+}
+.img img{    
+    width: 50%;
+}
+.nombre{
+    font-weight: 700;
+    font-size: large;
+}
+.numero{
+    margin-top: 8px;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
