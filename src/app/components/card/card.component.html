@@ -1,7 +1,15 @@
 <div class="contenedor">
-    <div class="img">
+
+    <div class="top">
+        <button class="button">+</button>
+        <app-etiqueta  [pokemon]="pokemon" class="tipos"></app-etiqueta>
+    </div>
+        <div class="img">
         <img src={{pokemon?.imagen}} alt="">
     </div>
-    <div class="nombre">{{pokemon?.nombre}}</div>
-    <div class="numero">{{pokemon?.numero}}</div>
+    <div class="nombre">{{pokemon?.nombre | titlecase}}</div>
+    <div class="numero">#{{pokemon?.numero}}</div>
+    
+    
+    
 </div>

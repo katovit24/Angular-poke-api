@@ -14,42 +14,87 @@ export class ServicioPokemon {
   listaUrl : string[] = [];
   listaPokemon : string[] = [];
   listaCard : PokeInterface[] = [];
+  todosPokemon : PokeInterface[]= [];
+  listaTypes: string[] = [];
+  private _numerocarga: number = 30;
+  public offset = 0;
+
+  public get numerocarga(): number {
+    return this._numerocarga;
+  }
+  public set numerocarga(value: number) {
+    this._numerocarga = value;
+  }
+  
   
 
   dameDatos(){
     return new Promise<string[]>((resolve , reject)=>{
-      this.http.get("https://pokeapi.co/api/v2/pokemon?limit=219&offset=0").subscribe((data : any) =>{
-        data.results.forEach((pokemon : any) => {
-          this.listaUrl.push(pokemon.url);
-        });
+      this.http.get(`https://pokeapi.co/api/v2/pokemon?limit=${this.numerocarga}&offset=${this.offset}`)
+      .subscribe((data : any) =>{
+        this.listaUrl = data.results.map((pokemon : any)=>{
+          return pokemon.url;
+        })
         resolve(this.listaUrl);
+      });
       });
       
     }
-  )}
+  
+  async listadoPokemon(){
 
-listadoPokemon(){
-
-  return this.dameDatos()
-  .then((urls : string []) => {
-    const arrayPromesas = urls.map((url =>firstValueFrom(this.http.get(url))))
-    return Promise.all(arrayPromesas)
-  })
+  const urls = await this.dameDatos();
+  const arrayPromesas = urls.map((url => firstValueFrom(this.http.get(url))));
+  return await Promise.all(arrayPromesas);
 
 }
 
-listadoDefinitivo(): Promise<PokeInterface[]>{
-  return this.listadoPokemon()
-  .then((lista : any[])=>{
-    lista.forEach((elemento : any) =>{
-      const pokemon : PokeInterface = {nombre : "", numero : 0, imagen : ""}
-      pokemon.nombre = elemento.name;
-      pokemon.numero = elemento.id;
-      pokemon.imagen = elemento.sprites.other['official-artwork'].front_default
-      this.listaCard.push(pokemon)
+async listadoDefinitivo(): Promise<PokeInterface[]> {
+  const lista = await this.listadoPokemon();
+  return lista.map((elemento: any) => ({
+    nombre: elemento.name,
+    numero: elemento.id,
+    imagen: elemento.sprites.other['official-artwork'].front_default,
+    type : elemento.types.map((e : any) =>{
+      return e.type.name
     })
-    return this.listaCard
-  })
+  }));
 }
+
+async getAll(){
+
+  if(this.todosPokemon.length===0){
+
+  this.numerocarga = 100000;
+  this.offset = 0;
+  this.todosPokemon = await this.listadoDefinitivo();
+  }
+  return  this.todosPokemon
+}
+
+async getByType(type : string){
+
+  this.numerocarga = 100000;
+  this.offset = 0;
+  this.todosPokemon = await this.listadoDefinitivo();
+  this.todosPokemon.filter((pokemon : any)=>{
+    return pokemon.type == type
+  })
+
+}
+
+async getTypes(){
+  return new Promise<any>((resolve, reject) => {
+    this.http.get("https://pokeapi.co/api/v2/type?offset=00&limit=18")
+    .subscribe((data:any)=>{
+      this.listaTypes = data.results.map((type:any)=>{
+        return type.name;
+      })
+      resolve (this.listaTypes);
+    });
+    
+  });
+}
+
 
 }

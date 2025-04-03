@@ -1,5 +1,6 @@
 export interface PokeInterface {
     nombre : string,
     numero : number,
-    imagen : string
+    imagen : string,
+    type : string[]
 }

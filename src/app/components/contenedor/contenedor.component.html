@@ -1,4 +1,19 @@
-<div class="contenedor">
-    <app-card *ngFor="let item of pokemonCards" [pokemon]="item"></app-card>
+<div class="columnas">
+<div class="find" *ngFor="let type of imagesTypes" >
+  <!-- <input type="text" [(ngModel)]="input" (keyup)="filtrar()" />
+  <button>Buscar</button> -->
+    <img class="types" [src]="type.img" alt="">
+    <p>{{type.name}}</p>
+  
+</div>
+</div>
+<div class="containerSpinner" *ngIf="cargando">
+  <div class="pokemon"></div>
 </div>
 
+<div class="contenedor">
+  <app-card *ngFor="let item of pokemonCards" [pokemon]="item"></app-card>
+</div>
+<div class="botonCarga">
+  <button class="cargarMas" (click)="cargaMas()">Cargar Mas</button>
+</div>
